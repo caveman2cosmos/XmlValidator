@@ -13,25 +13,27 @@ namespace XmlValidator
         private static Log _log;
         private static int _fileCount;
 
-        static void Main()
+        static int Main(string[] args)
         {
             Console.SetWindowSize(Math.Min(130, Console.LargestWindowWidth), Math.Min(35, Console.LargestWindowHeight));
-            Console.Out.WriteLine($"Civ4 XML-Validator {Assembly.GetExecutingAssembly().GetName().Version} by Alberts2");
+            Console.Out.WriteLine($"Civ4 XML-Validator C2C Edition {Assembly.GetExecutingAssembly().GetName().Version} by Alberts2");
             Console.Out.WriteLine();
+
+            var failed = false;
+            var automated = args.Contains("-a", StringComparer.InvariantCultureIgnoreCase);
             if (Init())
             {
                 try
                 {
                     _log.LogWriteLine("Validating xml");
                     _fileCount = 0;
-                    var failed = false;
                     var directories = new[] { "..\\Assets\\Xml", "..\\Assets\\Modules" };
                     foreach (var dir in directories)
                     {
                         var path = Path.GetFullPath(dir);
                         if (Directory.Exists(path))
                         {
-                            failed = ValidateDirectory(path);
+                            failed = !ValidateDirectory(path);
                             if (failed) break;
                         }
                     }
@@ -51,17 +53,23 @@ namespace XmlValidator
                 catch (Exception ex)
                 {
                     _log.LogWriteLine(ex.ToString());
+                    failed = true;
                 }
             }
 
-            Console.Out.WriteLine();
-            Console.Out.WriteLine("Press any key to exit....");
-
-            while (true)
+            if (!automated)
             {
-                Console.ReadKey(true);
-                break;
+                Console.Out.WriteLine();
+                Console.Out.WriteLine("Press any key to exit....");
+
+                while (true)
+                {
+                    Console.ReadKey(true);
+                    break;
+                } 
             }
+
+            return failed ? -1 : 0;
         }
 
         private static bool Init()
@@ -82,11 +90,11 @@ namespace XmlValidator
         {
             foreach (var file in Directory.EnumerateFiles(strPath, "*.xml", SearchOption.AllDirectories).Where(f => !f.ToLowerInvariant().Contains("schema.xml")))
             {
-                var failed = ValidateFile(file);
+                var failed = !ValidateFile(file);
                 if(failed)
-                    return true;
+                    return false;
             }
-            return false;
+            return true;
         }
         private static bool ValidateFile(string file)
         {
@@ -123,7 +131,7 @@ namespace XmlValidator
                 _log.LogWriteLine(ex.ToString());
             }
 
-            return failed;
+            return !failed;
         }
     }
 }

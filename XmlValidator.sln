@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29025.244
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Civ4XmlValidator", "XmlValidator\Civ4XmlValidator.csproj", "{A26C1264-FD75-42AD-A906-65CCBE342CE6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Civ4XmlValidator", "XmlValidator\XmlValidator.csproj", "{A26C1264-FD75-42AD-A906-65CCBE342CE6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
