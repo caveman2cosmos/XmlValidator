@@ -15,12 +15,14 @@ namespace XmlValidator
 
         static int Main(string[] args)
         {
-            Console.SetWindowSize(Math.Min(130, Console.LargestWindowWidth), Math.Min(35, Console.LargestWindowHeight));
-            Console.Out.WriteLine($"Civ4 XML-Validator C2C Edition {Assembly.GetExecutingAssembly().GetName().Version} by Alberts2");
-            Console.Out.WriteLine();
-
             var failed = false;
             var automated = args.Contains("-a", StringComparer.InvariantCultureIgnoreCase);
+
+            if (!automated)
+                Console.SetWindowSize(Math.Min(130, Console.LargestWindowWidth), Math.Min(35, Console.LargestWindowHeight));
+
+            Console.Out.WriteLine($"Civ4 XML-Validator C2C Edition {Assembly.GetExecutingAssembly().GetName().Version} by Alberts2");
+            Console.Out.WriteLine();
             if (Init())
             {
                 try
@@ -40,15 +42,9 @@ namespace XmlValidator
 
                     _log.LogWriteSeperator();
 
-                    if (failed)
-                    {
-                        _log.LogWriteLine($"Validation failed!");
-                    }
-                    else
-                    {
-                        _log.LogWriteLine($"Validation of {_fileCount} files complete without error(s)!");
-                    }
-
+                    _log.LogWriteLine(failed
+                        ? $"Validation failed!"
+                        : $"Validation of {_fileCount} files complete without error(s)!");
                 }
                 catch (Exception ex)
                 {
